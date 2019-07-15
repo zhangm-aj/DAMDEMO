@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>GlodonDam</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
+    <script type="application/javascript" src="js/bootstrap.min.js" ></script>
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style type="text/css">
+        /* 导航栏的样式。float浮动起来*/
+        .functions{
+            height: 1080px;
+            width: 100%;
+        }
+        .functions h1{padding: 300px}
+        .servers{
+            height: 1080px;
+            width: 100%;
+        }
+        .servers h1{ padding: 300px}
+        .contact{
+            height: 1080px;
+            width: 100%;
+        }
+        .contact{padding: 300px}
+
+        .header{
+            width: 100%;
+            /*透明程度和层级*/
+           opacity: 0.9;
+            z-index: 999;
+            position: fixed;
+             height: 80px;}
+        .header div1{
+            background-color: #4cae4c;
+            float: left;
+            width: 10%;
+            height: 60px;}
+        .header div2{
+            background-color: #4cae4c;
+            float: left;
+            width: 80%;
+            height: 60px;
+            line-height:60px ;}
+        .header div3{
+            background-color: #4cae4c;
+            float: left;
+            width: 10%;
+            height: 60px;
+            line-height:60px ;}
+        .header div2 a{
+            padding: 24px;
+            color: white;
+
+            }
+        .header div2 a:hover{
+            color: #46b8da;
+        }
+        .header div3 a{
+            padding: 4px;
+            color: white;
+
+            }
+
+        .moveword{
+            position: fixed;
+            top: 80px;
+            z-index: 999;
+            opacity: 0.9;
+            width: 100%;
+            height: 30px;
+            background-color: #2aabd2;
+            line-height: 2;
+
+        }
+        .moveword marquee{
+            height: 30px;
+            color: white;
+            font-family: 华文隶书;
+
+        }
+        .cur{
+            color: #46b8da;
+        }
+
+        .lunbo div{
+            width: 100%;
+            height: 900px;
+        }
+    </style>
+</head>
+<body onload="init()">
+    <div class="header" id="header">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div1 >
+            <img src="img/u=2369125735,3477581856&fm=27&gp=0.jpg" width="105" height="60"/>
+        </div1>
+        <div2>
+
+            <a href="#" id="shouye" >首页</a>
+            <a href="#functions" >功能</a>
+            <a  href="#">视频</a>
+            <a href="#servers"  >服务</a>
+            <a href="#contact"  >联系我们</a>
+            <a href="#">代理商</a>
+            <a href="#">更新日志</a>
+            <a href="#">开放平台</a>
+            <a href="#">DAM</a>
+            <a href="#">VPM</a>
+
+        </div2>
+
+        <div3 >
+            <a href="/regist" style="font-size: larger">注册</a>
+            <a href="/login" style="font-size: larger">登录</a>
+        </div3>
+    </div><!-- /.container-fluid -->
+    <div class="moveword">
+        <marquee onmouseover="stop()" onmouseout="start()">欢迎新老客户使用DAM，原VPM用户请点击上方的VPM登录或者通过http://vpn.glodon.com</marquee>
+    </div>
+    <div class="lunbo">
+        <p align="center"><img height="900px" width="100%" id="lunboid" src="img/1.jpg"/></p>
+    </div>
+
+    <!--功能-->
+    <div class="functions" id="functions">
+
+        <h1 align="center">这里假装有一张功能的图片</h1>
+    </div>
+    <!--服务-->
+    <div class="servers" id="servers">
+        <h1 align="center">这里假装有一张服务的图片</h1>
+    </div>
+    <!--联系我们-->
+    <div class="contact" id="contact">
+        <h1 align="center" >这里假装有一张联系的图片</h1>
+    </div>
+</body>
+
+<script>
+    var i = 1;
+    // var urlstr = location.href;
+    // var urlstatus = false;
+    // $("#header div2 a").each(function () {
+    //     if((urlstr + '/').indexOf($(this).attr('href'))>-1&& $(this).attr('href')!= ''){
+    //         $(this).addClass('cur');
+    //         urlstatus= true;
+    //     }else{
+    //         $(this).removeClass('cur');
+    //     }
+    // });
+    // if(!urlstatus){$("#header div2 a").eq(0).addClass('cur');}
+    $(".header div2 a").click(function(){
+        $(this).addClass("cur").siblings().removeClass('cur');
+    })
+    function init() {
+        //创建一个定时器
+        setInterval(changeImage,3000);
+
+        }
+    //更改图片
+    function changeImage() {
+        //获取图片元素
+        var imgObj=document.getElementById("lunboid");
+        i++;
+        //修改图片元素的src属性
+        imgObj.src = "img/"+i+".jpg";
+        if(i==3){
+            i = 0;
+        }
+    }
+
+
+</script>
+</html>
