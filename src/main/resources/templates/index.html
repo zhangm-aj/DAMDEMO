@@ -18,6 +18,7 @@
             height: 1080px;
             width: 100%;
         }
+
         .servers h1{ padding: 300px}
         .contact{
             height: 1080px;
@@ -51,12 +52,17 @@
             line-height:60px ;}
         .header div2 a{
             padding: 24px;
-            color: white;
-
             }
+         .lanmu{
+             color: white;
+        }
         .header div2 a:hover{
             color: #46b8da;
         }
+        .cur{
+            color:blue;
+        }
+
         .header div3 a{
             padding: 4px;
             color: white;
@@ -80,9 +86,7 @@
             font-family: 华文隶书;
 
         }
-        .cur{
-            color: #46b8da;
-        }
+
 
         .lunbo div{
             width: 100%;
@@ -91,6 +95,7 @@
     </style>
 </head>
 <body onload="init()">
+<div class="firstpage" id="firstpage">
     <div class="header" id="header">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div1 >
@@ -98,16 +103,16 @@
         </div1>
         <div2>
 
-            <a href="#" id="shouye" >首页</a>
-            <a href="#functions" >功能</a>
-            <a  href="#">视频</a>
-            <a href="#servers"  >服务</a>
-            <a href="#contact"  >联系我们</a>
-            <a href="#">代理商</a>
-            <a href="#">更新日志</a>
-            <a href="#">开放平台</a>
-            <a href="#">DAM</a>
-            <a href="#">VPM</a>
+            <a href="#firstpage" id="shouye" class="lanmu">首页</a>
+            <a href="#functions" class="lanmu">功能</a>
+            <a  href="#"class="lanmu">视频</a>
+            <a href="#servers" class="lanmu" >服务</a>
+            <a href="#contact" class="lanmu" >联系我们</a>
+            <a href="#"class="lanmu">代理商</a>
+            <a href="#"class="lanmu">更新日志</a>
+            <a href="#"class="lanmu">开放平台</a>
+            <a href="#"class="lanmu">DAM</a>
+            <a href="#"class="lanmu">VPM</a>
 
         </div2>
 
@@ -121,6 +126,7 @@
     </div>
     <div class="lunbo">
         <p align="center"><img height="900px" width="100%" id="lunboid" src="img/1.jpg"/></p>
+    </div>
     </div>
 
     <!--功能-->
