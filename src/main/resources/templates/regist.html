@@ -11,7 +11,7 @@
 	TD {
 		FONT-SIZE: 12px; COLOR: #ffffff; FONT-FAMILY: 宋体
 	}
-	
+
 	.error{
 		color:red;
 
@@ -32,7 +32,7 @@
       width: 25%;
       float: left;
     }
-	
+
 </STYLE>
 <META content="MSHTML 6.00.6000.16809" name=GENERATOR>
 
@@ -66,7 +66,7 @@
 			});
 		}
 	}
-	
+
 	// 可以阻止表单的提交
 	function checkForm(){
 		// 先让校验名称的方法先执行以下
@@ -76,7 +76,7 @@
 			return false;
 		}
 	}
-	
+
 </script>
 
 </HEAD>
@@ -105,8 +105,8 @@
               <TD style="HEIGHT: 200px"></TD>
             </TR>
             <TR>
-              <TD height=300>
-                <TABLE  height=300 cellPadding=0 width=100% border=0>
+              <TD height=200>
+                <TABLE  height=500 cellPadding=0 width=100% border=0>
                   <TBODY>
                   <TR>
                     <TD colSpan=2 height=35></TD></TR>
@@ -135,6 +135,17 @@
                           <TD style="HEIGHT: 28px">
                 	<SPAN id=passwordId
                           style="FONT-WEIGHT: bold; VISIBILITY: hidden; COLOR: white">请输入密码</SPAN>
+                          </TD>
+                        </TR>
+
+                        <TR>
+                          <TD style="HEIGHT: 28px">确认密码：</TD>
+                          <TD style="HEIGHT: 28px">
+                            <INPUT id="user_confirmPasswd" style="WIDTH: 130px" type=password name="user_password">
+                          </TD>
+                          <TD style="HEIGHT: 28px">
+                	<SPAN id=confirmPasswdId
+                          style="FONT-WEIGHT: bold; VISIBILITY: hidden; COLOR: white">密码不一致</SPAN>
                           </TD>
                         </TR>
 
