@@ -146,17 +146,6 @@
 
 <script>
     var i = 1;
-    // var urlstr = location.href;
-    // var urlstatus = false;
-    // $("#header div2 a").each(function () {
-    //     if((urlstr + '/').indexOf($(this).attr('href'))>-1&& $(this).attr('href')!= ''){
-    //         $(this).addClass('cur');
-    //         urlstatus= true;
-    //     }else{
-    //         $(this).removeClass('cur');
-    //     }
-    // });
-    // if(!urlstatus){$("#header div2 a").eq(0).addClass('cur');}
     $(".header div2 a").click(function(){
         $(this).addClass("cur").siblings().removeClass('cur');
     })

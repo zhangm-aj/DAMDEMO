@@ -1,133 +1,92 @@
 package life.zm.damdemo.damdemo.model;
 
-import org.springframework.web.multipart.MultipartFile;
 
+
+import javax.xml.crypto.Data;
 import java.util.Date;
 
 public class User {
-    private Long id;
+    private Long user_id;
 
-    private String email;
 
-    private String phone;
 
-    private String name;
+    private Integer user_enable;
 
-    private String passwd;
+    private String user_code;
+    private String user_name;
 
-    private String confirmPasswd;
+    private String user_password;
 
-    private Integer type;//普通用户1，经纪人2
+    private String user_confirmPassword;
 
-    private Date   createTime;
+    private Date user_createTime;
 
-    private Integer enable;
-
-    private String  avatar;
-
-    private MultipartFile avatarFile;
-
-    private String newPassword;
+    private String user_newPassword;
 
     private String key;
 
-    private Long   agencyId;
-
-    private String aboutme;
-
-    private String agencyName;
-
-    public Long getId() {
-        return id;
+    public Long getUser_id() {
+        return user_id;
     }
 
-    public String getEmail() {
-        return email;
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public Integer getUser_enable() {
+        return user_enable;
     }
 
-    public String getPhone() {
-        return phone;
+    public void setUser_enable(Integer user_enable) {
+        this.user_enable = user_enable;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public String getUser_code() {
+        return user_code;
     }
 
-    public String getPasswd() {
-        return passwd;
+    public void setUser_code(String user_code) {
+        this.user_code = user_code;
     }
 
-    public void setPasswd(String passwd) {
-        this.passwd = passwd;
+    public String getUser_name() {
+        return user_name;
     }
 
-    public String getConfirmPasswd() {
-        return confirmPasswd;
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
-    public void setConfirmPasswd(String confirmPasswd) {
-        this.confirmPasswd = confirmPasswd;
+    public String getUser_password() {
+        return user_password;
     }
 
-    public String getAboutme() {
-        return aboutme;
+    public void setUser_password(String user_password) {
+        this.user_password = user_password;
     }
 
-    public void setAboutme(String aboutme) {
-        this.aboutme = aboutme;
+    public String getUser_confirmPassword() {
+        return user_confirmPassword;
     }
 
-    public Integer getType() {
-        return type;
+    public void setUser_confirmPassword(String user_confirmPassword) {
+        this.user_confirmPassword = user_confirmPassword;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public Date getUser_createTime() {
+        return user_createTime;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public void setUser_createTime(Date user_createTime) {
+        this.user_createTime = user_createTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public String getUser_newPassword() {
+        return user_newPassword;
     }
 
-    public Integer getEnable() {
-        return enable;
-    }
-
-    public void setEnable(Integer enable) {
-        this.enable = enable;
-    }
-
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    public MultipartFile getAvatarFile() {
-        return avatarFile;
-    }
-
-    public void setAvatarFile(MultipartFile avatarFile) {
-        this.avatarFile = avatarFile;
-    }
-
-    public String getAgencyName() {
-        return agencyName;
-    }
-
-    public void setAgencyName(String agencyName) {
-        this.agencyName = agencyName;
+    public void setUser_newPassword(String user_newPassword) {
+        this.user_newPassword = user_newPassword;
     }
 
     public String getKey() {
@@ -136,33 +95,5 @@ public class User {
 
     public void setKey(String key) {
         this.key = key;
-    }
-
-    public Long getAgencyId() {
-        return agencyId;
-    }
-
-    public void setAgencyId(Long agencyId) {
-        this.agencyId = agencyId;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

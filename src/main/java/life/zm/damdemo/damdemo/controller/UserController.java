@@ -1,42 +1,70 @@
 package life.zm.damdemo.damdemo.controller;
 
 import life.zm.damdemo.damdemo.Service.UserService;
+import life.zm.damdemo.damdemo.mapper.UserMapper;
 import life.zm.damdemo.damdemo.model.User;
-import life.zm.damdemo.damdemo.result.ResultMsg;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class UserController {
     @Autowired
     private UserService userService;
-    /*
-    * 注册提交：1验证注册 2 发送邮箱 3验证失败重定向到注册页面
-    * 注册页获取，根据account对象为依据判断是否注册页获取请求
-    * */
-    @RequestMapping("/regist")
-    public String accountsRegister(User account, ModelMap modelMap){
-        if(account==null || account.getName()==null){
-            return "regist111";
-        }
-        //用户验证
-        ResultMsg resultMsg = UserHelper.validate(account);
-        if(resultMsg.isSuccess()&& userService.addAccount(account)){
-            return "login";
+    private User user = new User();
+    //通过登录名看是否存在
+    @RequestMapping(value = "/userCheckCode",method = RequestMethod.POST)
+    @ResponseBody
+    private Map<String,Object> userCheckCode(HttpServletRequest request, HttpServletResponse response){
+        Map<String,Object> map = new HashMap<>();
+        String user_code = request.getParameter("user_code");
+        User u = userService.findUserByCode(user_code);
+        if(u != null){
+            map.put("result","no");
         }else{
-            return "redirect:regist?"+resultMsg.asUrlParams();
+            map.put("result","yes");
+        }
+        return  map;
+            }
+    @RequestMapping(value = "/userRegist",method = RequestMethod.POST)
+     public String userRegist(User user1){
+        user.setUser_code(user1.getUser_code());
+        user.setUser_password(user1.getUser_password());
+        user.setUser_name(user1.getUser_name());
+        user.setUser_enable(1);
+        user.setUser_createTime(new Date(System.currentTimeMillis()));
+        userService.addUser(user);
+        return "redirect:/login";
+     }
+    @RequestMapping(value = "/userLogin",method = RequestMethod.POST)
+    public String userLogin(User user2,HttpServletRequest request){
+        User existUser = userService.userLogin(user2);
+        if(existUser != null){
+            request.getSession().setAttribute("user",existUser);
+            return "redirect:/firstpage";
+        }else {
+            return "redirect:/login";
         }
     }
-    @RequestMapping("/verify")
-    public String verify(String key){
-        boolean result = userService.enable(key);
-        if(result){
-            return "redirect:/index?" + ResultMsg.successMsg("激活成功").asUrlParams();
-        }else{
-            return "redirect:/rigist?"+ResultMsg.errorMsg("激活失败，请确认链接是否过期");
-        }
+    @GetMapping("/firstpage")
+    public String firstPage(){
+        return "firstpage";
+    }
+    @RequestMapping(value = "/userQuit",method = RequestMethod.POST)
+    public String userQuit(HttpServletRequest request){
+        request.getSession().removeAttribute("user");
+        return "redirect:/login";
+    }
+    }
 
-    }
-}
+

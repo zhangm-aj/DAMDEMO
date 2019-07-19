@@ -15,7 +15,7 @@ public class IndexController {
         return "login";
     }
     @GetMapping("/regist")
-    public String register(){
+    public String regist(){
         return "regist";
     }
 
