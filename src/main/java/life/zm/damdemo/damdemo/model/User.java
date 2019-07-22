@@ -7,22 +7,13 @@ import java.util.Date;
 
 public class User {
     private Long user_id;
-
-
-
     private Integer user_enable;
-
     private String user_code;
     private String user_name;
-
     private String user_password;
-
     private String user_confirmPassword;
-
     private Date user_createTime;
-
     private String user_newPassword;
-
     private String key;
 
     public Long getUser_id() {
@@ -95,5 +86,20 @@ public class User {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "user_id=" + user_id +
+                ", user_enable=" + user_enable +
+                ", user_code='" + user_code + '\'' +
+                ", user_name='" + user_name + '\'' +
+                ", user_password='" + user_password + '\'' +
+                ", user_confirmPassword='" + user_confirmPassword + '\'' +
+                ", user_createTime=" + user_createTime +
+                ", user_newPassword='" + user_newPassword + '\'' +
+                ", key='" + key + '\'' +
+                '}';
     }
 }

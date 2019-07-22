@@ -1,18 +1,14 @@
 package life.zm.damdemo.damdemo.controller;
 
 import life.zm.damdemo.damdemo.Service.UserService;
-import life.zm.damdemo.damdemo.mapper.UserMapper;
 import life.zm.damdemo.damdemo.model.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +19,7 @@ public class UserController {
     private UserService userService;
     private User user = new User();
     //通过登录名看是否存在
+    //ajax校验。看是否存在该用户名
     @RequestMapping(value = "/userCheckCode",method = RequestMethod.POST)
     @ResponseBody
     private Map<String,Object> userCheckCode(HttpServletRequest request, HttpServletResponse response){
@@ -36,6 +33,7 @@ public class UserController {
         }
         return  map;
             }
+            //用户注册
     @RequestMapping(value = "/userRegist",method = RequestMethod.POST)
      public String userRegist(User user1){
         user.setUser_code(user1.getUser_code());
@@ -46,21 +44,25 @@ public class UserController {
         userService.addUser(user);
         return "redirect:/login";
      }
+     //用户登录
     @RequestMapping(value = "/userLogin",method = RequestMethod.POST)
     public String userLogin(User user2,HttpServletRequest request){
         User existUser = userService.userLogin(user2);
         if(existUser != null){
             request.getSession().setAttribute("user",existUser);
-            return "redirect:/firstpage";
+            return "redirect:/firstshow";
         }else {
             return "redirect:/login";
         }
     }
-    @GetMapping("/firstpage")
-    public String firstPage(){
-        return "firstpage";
+    //跳转到该路径
+    @GetMapping("/firstshow")
+    public String firstShow(){
+        return "firstshow11";
     }
-    @RequestMapping(value = "/userQuit",method = RequestMethod.POST)
+
+    //用户退出
+    @RequestMapping(value = "/userQuit",method = RequestMethod.GET)
     public String userQuit(HttpServletRequest request){
         request.getSession().removeAttribute("user");
         return "redirect:/login";
