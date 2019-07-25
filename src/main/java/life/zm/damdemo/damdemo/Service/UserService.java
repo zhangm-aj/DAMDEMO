@@ -1,30 +1,19 @@
 package life.zm.damdemo.damdemo.Service;
-import life.zm.damdemo.damdemo.mapper.UserMapper;
-import life.zm.damdemo.damdemo.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@Transactional
-public class UserService {
-
-    @Autowired
-    private UserMapper userMapper;
+import life.zm.damdemo.damdemo.model.UserDomain;
 
 
+public interface UserService {
+    UserDomain findUserByCode(String user_code);
+
+    void addUser(UserDomain userDomain);
+
+    UserDomain userLogin(UserDomain user2);
 
 
-    public void addUser(User user) {
-        userMapper.addUser(user);
-    }
+    void updateUserInfo(UserDomain temp);
 
-    public User findUserByCode(String user_code) {
-        return userMapper.findUserByCode(user_code);
+    void updateUserPassword(UserDomain temp);
 
-    }
-
-    public User userLogin(User user2) {
-        return userMapper.userLogin(user2);
-    }
+    UserDomain login(String username, String password);
 }

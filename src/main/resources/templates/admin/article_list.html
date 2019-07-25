@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='文章管理',active='article'">
+<header th:replace="admin/fragments/header::headerFragment(${title},${active})"></header>
+<body class="fixed-left">
+<div id="wrapper">
+    <div th:replace="admin/fragments/header::header-body"></div>
+   2222222222222222222222
+</div>
+<div th:replace="admin/fragments/footer :: footer"></div>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var tale = new $.tale();
+    function delPost(cid) {
+        tale.alertConfirm({
+            title:'确定删除该文章吗?',
+            then: function () {
+                tale.post({
+                    url : '/admin/article/delete',
+                    data: {cid: cid},
+                    success: function (result) {
+                        if(result && result.code == 'success'){
+                            tale.alertOkAndReload('文章删除成功');
+                        } else {
+                            tale.alertError(result.msg || '文章删除失败');
+                        }
+                    }
+                });
+            }
+        });
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

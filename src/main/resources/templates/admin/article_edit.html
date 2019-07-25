@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='保存文章',active='publish'">
+<header th:replace="admin/fragments/header::headerFragment(${title},${active})"></header>
+<link th:href="@{/admin/plugins/tagsinput/jquery.tagsinput.css}" rel="stylesheet"/>
+<link th:href="@{/admin/plugins/select2.dist.css/select2-bootstrap.css}" rel="stylesheet"/>
+<link th:href="@{/admin/plugins/toggles/toggles.css}" rel="stylesheet"/>
+
+<link href="//cdn.bootcss.com/multi-select/0.9.12/css/multi-select.css" rel="stylesheet"/>
+<link href="//cdn.bootcss.com/select2/3.4.8/select2.min.css" rel="stylesheet"/>
+<link th:href="@{/admin/plugins/md/css/style.css}" rel="stylesheet"/>
+<!-- editor.md -->
+<link th:href="@{/admin/editormd/css/editormd.css}" rel="stylesheet"/>
+<style>
+    #tags_tagsinput {
+        background-color: #fafafa;
+        border: 1px solid #eeeeee;
+    }
+
+    #tags_addTag input {
+        width: 100%;
+    }
+
+    #tags_addTag {
+        margin-top: -5px;
+    }
+</style>
+<body class="fixed-left">
+<div id="wrapper">
+    <div th:replace="admin/fragments/header::header-body"></div>
+  <div class="content-page">
+      111111111111
+</div>
+<div th:replace="admin/fragments/footer :: footer"></div>
+<script type="text/javascript">
+    $(function() {
+        editormd("my-editormd", {//注意1：这里的就是上面的DIV的id属性值
+            width   : "90%",
+            height  : 640,
+            syncScrolling : "single",
+            path    : "/admin/editormd/lib/",//注意2：你的路径
+            saveHTMLToTextarea : true,//注意3：这个配置，方便post提交表单
+            /**上传图片相关配置如下*/
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"], //图片上传格式
+            imageUploadURL: "/admin/attach/uploadfile",
+            onload: function (obj) { //上传成功之后的回调
+            }
+        });
+    });
+</script>
+<script th:src="@{/admin/plugins/tagsinput/jquery.tagsinput.min.js}"></script>
+<script th:src="@{/admin/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>
+
+<!-- editor.md -->
+<script th:src="@{/admin/editormd/src/editormd.js}"></script>
+
+
+<!--<script th:src="@{/admin/plugins/md/js/jquery.scrollto.js}"></script>-->
+<!--<script th:src="@{/admin/plugins/md/js/pagedown.js}"></script>-->
+<!--<script th:src="@{/admin/plugins/md/js/pagedown-extra.js}"></script>-->
+<!--<script th:src="@{/admin/plugins/md/js/diff.js}"></script>-->
+<!--<script th:src="@{/admin/plugins/md/js/md.js}"></script>-->
+
+<script th:src="@{//cdn.bootcss.com/multi-select/0.9.12/js/jquery.multi-select.min.js}"></script>
+<script th:src="@{//cdn.bootcss.com/select2/3.4.8/select2.min.js}"></script>
+<script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
+<script th:src="@{/admin/js/article.js}"></script>
+</body>
+</html>

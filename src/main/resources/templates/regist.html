@@ -40,6 +40,31 @@
 <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
 
 <script type="text/javascript">
+      function checkEmail() {
+        var emaile = $("#email").val();
+        if(emaile.trim() == ""){
+          $("#emailId").addClass("error");
+          $("#emailId").html("请输入邮箱")
+        }else{
+          $.ajax({
+            type:"post",
+            url:"/userCheckEmail",
+            data:{
+              email:emaile,
+            },
+            dateType:"json",
+            success:function (data) {
+              if(data.result && data.result == "no"){
+                $("#emailId").addClass("error");
+                $("#emailId").html("非法邮箱");
+              }else{
+                $("#emailId").removeClass("error");
+                $("#emailId").html("");
+              }
+            }
+          });
+        }
+      }
      //密码失去焦点
      function checkPassword(){
        var password1 = $("#user_password").val();
@@ -78,7 +103,7 @@
               type:"post",
               url:"/userCheckCode",
               data:{
-                user_code:code,
+                username:code,
               },
               dateType:"json",
               success:function (data) {
@@ -149,7 +174,7 @@
                           <TD style="HEIGHT: 28px" width=120px>登 录 名：</TD>
 
                           <TD style="HEIGHT: 28px" width=150>
-                            <INPUT id="user_code" style="WIDTH: 130px" name="user_code"onblur="checkCode()">
+                            <INPUT id="user_code" style="WIDTH: 130px" name="username"onblur="checkCode()">
                           </TD>
                           <TD style="HEIGHT: 28px" width=370>
                             <SPAN id="codeId" style="FONT-WEIGHT: bold;"></SPAN>
@@ -159,13 +184,15 @@
                         <TR>
                           <TD style="HEIGHT: 28px">登录密码：</TD>
                           <TD style="HEIGHT: 28px">
-                            <INPUT id="user_password" style="WIDTH: 130px" type=password name="user_password" onblur="checkPassword()">
+                            <INPUT id="user_password" style="WIDTH: 130px" type=password name="password" onblur="checkPassword()">
                           </TD>
                           <TD style="HEIGHT: 28px">
                 	<SPAN id=passwordId
                           style="FONT-WEIGHT: bold; "></SPAN>
                           </TD>
                         </TR>
+
+
                         <TR>
                           <TD style="HEIGHT: 28px">确认密码：</TD>
                           <TD style="HEIGHT: 28px">
@@ -177,17 +204,30 @@
                           </TD>
                         </TR>
 
-
+                        <TR>
+                          <TD style="HEIGHT: 28px">用户邮箱：</TD>
+                          <TD style="HEIGHT: 28px">
+                            <INPUT id="email" style="WIDTH: 130px"  name="email" onblur="checkEmail()">
+                          </TD>
+                          <TD style="HEIGHT: 28px">
+                	<SPAN id=emailId
+                          style="FONT-WEIGHT: bold; "></SPAN>
+                          </TD>
+                        </TR>
 
                         <TR>
                           <TD style="HEIGHT: 28px">用户姓名：</TD>
                           <TD style="HEIGHT: 28px">
-                            <INPUT id="user_name" style="WIDTH: 130px" type="text" name="user_name">
+                            <INPUT id="user_name" style="WIDTH: 130px" type="text" name="screenName">
                           </TD>
 
                           <TD style="HEIGHT: 28px">
                             <SPAN id=RequiredFieldValidator4 style="FONT-WEIGHT: bold;"></SPAN>
                           </TD></TR>
+
+
+
+
 
                         <TR>
 

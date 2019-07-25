@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='系统设置',active='setting'">
+<header th:replace="admin/fragments/header::headerFragment(${title},${active})"></header>
+<link th:href="@{/admin/plugins/toggles/toggles.css}" rel="stylesheet"/>
+<body class="fixed-left">
+<div id="wrapper">
+    <div th:replace="admin/fragments/header::header-body"></div>
+    <div class="content-page">
+       999999999999999999999
+</div>
+<div th:replace="admin/fragments/footer :: footer"></div>
+<script src="//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js"></script>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var tale = new $.tale();
+
+    /**
+     * 保存全局设置
+     */
+    function saveSetting() {
+        var param = $('#global-form').serialize();
+        tale.post({
+            url : '/admin/setting',
+            data: param,
+            success: function (result) {
+                if(result && result.code == 'success'){
+                    tale.alertOk('设置保存成功');
+                } else {
+                    tale.alertError(result.msg || '设置保存失败');
+                }
+            }
+        });
+    }
+
+    /**
+     * 保存个性化设置
+     */
+    function saveIndiviSetting() {
+        var param = $('#indivi-form').serialize();
+        tale.post({
+            url : '/admin/setting',
+            data: param,
+            success: function (result) {
+                if(result && result.code == 'success'){
+                    tale.alertOk('设置保存成功');
+                } else {
+                    tale.alertError(result.msg || '设置保存失败');
+                }
+            }
+        });
+    }
+    /**
+     * 设置是否允许重新安装
+     */
+    function allow_reinstall(obj) {
+        var this_ = $(obj);
+        var on = this_.find('.toggle-on.active').length;
+        var off = this_.find('.toggle-off.active').length;
+        if (on == 1) {
+            $('#allow_install').val(0);
+        }
+        if (off == 1) {
+            $('#allow_install').val(1);
+        }
+    }
+
+    /**
+     * 系统备份
+     * @param type
+     */
+    function backup(type) {
+        var param = {
+            bk_type: type,
+            bk_path: $('#backup_dir').val()
+        };
+        tale.post({
+            url : '/admin/setting/backup',
+            data: param,
+            success: function (result) {
+                if(result && result.code == 'success'){
+                    if(result.payload && result.payload.attach_path){
+                        swal('备份成功', '您的附件备份在 <mark>'+ result.payload.attach_path +'</mark><br/><br/>' +
+                            '主题备份存储在 <mark>'+ result.payload.theme_path +'</mark>', 'success');
+                        $('#backup_dir').val('');
+                    }
+                    if(result.payload.sql_path){
+                        window.location.href = '/upload/' + result.payload.sql_path;
+                    }
+                } else {
+                    tale.alertError(result.msg || '备份失败');
+                }
+            }
+        });
+    }
+
+    $('.allow-1').toggles({
+        on: true,
+        text: {
+            on: '开启',
+            off: '关闭'
+        }
+    });
+    $('.allow-0').toggles({
+        off: true,
+        text: {
+            on: '开启',
+            off: '关闭'
+        }
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

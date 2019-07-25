@@ -1,15 +1,18 @@
 package life.zm.damdemo.damdemo;
 
+
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+
 
 @SpringBootApplication
-@EnableAsync
+
 public class DamdemoApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DamdemoApplication.class, args);
+    public static void main(String[] args) { SpringApplication.run(DamdemoApplication.class, args);
     }
 
 }
