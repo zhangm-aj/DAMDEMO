@@ -27,9 +27,99 @@
 <body class="fixed-left">
 <div id="wrapper">
     <div th:replace="admin/fragments/header::header-body"></div>
-  <div class="content-page">
-      111111111111
-</div>
+      <div class="content-page">
+          <div class="content">
+              <div class="container">
+                  <div class="row">
+                      <div class="col-sm-12">
+                          <h4 class="page-title">
+                              <th:block th:if="${null != contents}">
+                                  编辑文章
+                              </th:block>
+                              <th:block th:unless="${null != contents}">
+                                  发布文章
+                              </th:block>
+                          </h4>
+                      </div>
+                      <div class="col-md-12">
+                          <form id="articleForm" role="form" novalidate="novalidate">
+
+                              <input type="hidden" name="cid"
+                                     th:value="${contents!=null and contents.cid!=null}?${contents.cid}: ''" id="cid"/>
+                              <input type="hidden" name="status"
+                                     th:value="${contents!=null and contents.status !=null}?${contents.status}: 'publish'"
+                                     id="status"/>
+
+                              <input type="hidden" name="content" id="content-editor"/>
+
+                              <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
+                                  标题:<input type="text" class="form-control" placeholder="请输入文章标题（必须）" name="title"
+                                         required="required"
+                                         aria-required="true"
+                                         th:value="${contents!=null and contents.title!=null }?${contents.title}: ''"/>
+                              </div>
+
+
+
+                              <div class="form-group col-md-6" style="padding: 0 0 0 10px;">
+                                  <!-- 如果是作品类，那么暂时不允许使用标签 -->
+                                  备注:<input name="tags" id="haha"  type="text" class="form-control" placeholder="请填写文章备注"
+                                         th:value="${contents!=null and contents.tags !=null}?${contents.tags}: ''"/>
+                              </div>
+
+                              <div class="clearfix"></div>
+                              <div id="my-editormd" >
+                                <textarea id="my-text" name="my-text" style="display:none;" class="markdown-textarea"
+                                          th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>
+                                  <!-- 注意：name属性的值-->
+                                  <textarea id="text" name="text" style="display:none;" ></textarea>
+                              </div>
+                              <!--<div class="form-group">-->
+                              <!--<textarea style="height: 450px" autocomplete="off" id="text" name="text"-->
+                              <!--class="markdown-textarea"-->
+                              <!--th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>-->
+                              <!--</div>-->
+
+                              <div class="form-group col-md-3 col-sm-4" id="comment-div">
+                                  <label class="col-sm-4"></label>
+                                  <div class="col-sm-8">
+                                      <div ></div>
+                                  </div>
+                              </div>
+
+                              <div class="form-group col-md-3 col-sm-4">
+                                  <label class="col-sm-4"></label>
+                                  <div class="col-sm-8">
+                                      <div ></div>
+                                  </div>
+                              </div>
+
+                              <div class="form-group col-md-3 col-sm-4">
+                                  <label class="col-sm-4"></label>
+                                  <div class="col-sm-8">
+                                      <div ></div>
+                                  </div>
+                              </div>
+
+                              <div class="clearfix"></div>
+
+                              <div class="text-right">
+                                  <a class="btn btn-default waves-effect waves-light" th:href="@{/admin/article}">返回列表</a>
+                                  <button type="button" class="btn btn-primary waves-effect waves-light"
+                                          onclick="subArticle('publish');">
+                                      保存文章
+                                  </button>
+
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+                  <div th:replace="admin/fragments/footer :: footer-content"></div>
+              </div>
+          </div>
+      </div>
+  </div>
+
 <div th:replace="admin/fragments/footer :: footer"></div>
 <script type="text/javascript">
     $(function() {

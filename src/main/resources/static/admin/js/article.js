@@ -39,8 +39,7 @@ function subArticle(status) {
     }
     $('#content-editor').val(content);
     $("#articleForm #status").val(status);
-    $("#articleForm #categories").val($('#multiple-sel').val());
-    $("#articleForm #type").val($('#multiple-type').val());
+
     var params = $("#articleForm").serialize();
     console.log(params);
     var url = $('#articleForm #cid').val() != '' ? '/admin/article/modify' : '/admin/article/publish';

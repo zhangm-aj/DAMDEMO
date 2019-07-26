@@ -55,7 +55,7 @@
                     <li class="dropdown">
                         <a th:href="@{index.html}" class="dropdown-toggle profile" data-toggle="dropdown" aria-expanded="true">
 
-                            <span class="username" th:text="${session.login_user.username}"></span><span class="caret"></span>
+                            <span class="username" th:text="${session.login_user.getUsername()}"></span><span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
 
@@ -80,12 +80,12 @@
                 <li th:class="${active}=='publish'?'active':''">
                     <a th:href="@{/admin/article/publish}"
                        th:class="${active}=='publish'?'waves-effect active':'waves-effect'"><i
-                            class="fa fa-pencil-square-o" aria-hidden="true"></i><span> 文档文件 </span></a>
+                            class="fa fa-pencil-square-o" aria-hidden="true"></i><span> 发布文章 </span></a>
                 </li>
                 <li th:class="${active}=='article'?'active':''">
                     <a th:href="@{/admin/article}"
                        th:class="${active}=='article'?'waves-effect active':'waves-effect'"><i
-                            class="fa fa-list" aria-hidden="true"></i><span> 模型文件 </span></a>
+                            class="fa fa-list" aria-hidden="true"></i><span> 文章管理 </span></a>
                 </li>
                 <!--<li th:class="${active}=='page'?'active':''">-->
                     <!--<a th:href="@{/admin/page}" th:class="${active}=='page'?'waves-effect active':'waves-effect'"><i-->
@@ -94,17 +94,17 @@
                 <li th:class="${active}=='comments'?'active':''">
                     <a th:href="@{/admin/comments}"
                        th:class="${active}=='comments'?'waves-effect active':'waves-effect'"><i
-                            class="fa fa-comments" aria-hidden="true"></i><span> 权限设置 </span></a>
+                            class="fa fa-comments" aria-hidden="true"></i><span> 评论管理 </span></a>
                 </li>
                 <li th:class="${active}=='category'?'active':''">
                     <a th:href="@{/admin/category}"
                        th:class="${active}=='category'?'waves-effect active':'waves-effect'"><i
-                            class="fa fa-tags" aria-hidden="true"></i><span> 个人空间 </span></a>
+                            class="fa fa-tags" aria-hidden="true"></i><span> 分类/标签 </span></a>
                 </li>
                 <li th:class="${active}=='attach'?'active':''">
                     <a th:href="@{/admin/attach}"
                        th:class="${active}=='attach'?'waves-effect active':'waves-effect'"><i
-                            class="fa fa-cloud-upload" aria-hidden="true"></i><span> 上传文件 </span></a>
+                            class="fa fa-cloud-upload" aria-hidden="true"></i><span> 文件管理 </span></a>
                 </li>
                 <li th:class="${active}=='links'?'active':''">
                     <a th:href="@{/admin/links}" th:class="${active}=='links'?'waves-effect active':'waves-effect'"><i

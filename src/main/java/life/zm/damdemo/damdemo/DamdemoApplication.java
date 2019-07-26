@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 
 
 @SpringBootApplication
-
 public class DamdemoApplication {
 
     public static void main(String[] args) { SpringApplication.run(DamdemoApplication.class, args);

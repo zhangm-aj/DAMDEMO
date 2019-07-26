@@ -7,8 +7,7 @@ package life.zm.damdemo.damdemo.constant;
  **/
 public enum Types {
 
-    // 分类
-    CATEGORY("category"),
+
     // 标签
     TAG("tag"),
     // 文章
