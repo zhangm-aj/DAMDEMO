@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='项目设置',active='project'">
+<header th:replace="admin/fragments/header::headerFragment(${title},${active})"></header>
+<body>
+<div id="wrapper">
+    <div th:replace="admin/fragments/header::header-body"></div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">修改项目名</h4>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel panel-color panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">项目信息</h3>
+                            </div>
+                            <div class="panel-body">
+                                <form class="form-horizontal" role="form" id="userDomain-form">
+
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">项目名称</label>
+                                        <div class="col-md-9">
+                                            <input id="pname" type="text" class="form-control" name="pname" placeholder="输入项目名称"
+                                                    required="required" aria-required="true"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix pull-right">
+                                        <button type="button" class="btn btn-primary waves-effect waves-light" onclick="saveSettings()">
+                                            确认修改
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div th:replace="admin/fragments/footer :: footer-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="admin/fragments/footer :: footer"></div>
+<script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/jquery.validate.min.js}"></script>
+<script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/localization/messages_zh.min.js}"></script>
+<script th:inline="javascript" type="text/javascript">
+    /*<![CDATA[*/
+    var tale = new $.tale();
+
+    /**
+     * 保存个人信息
+     */
+    function saveSettings() {
+        //var param = $('#userDomain-form').serialize();
+        var pname = $("#pname").val();
+        var pname1=[[${session.pid}]];
+        console.log(pname);
+        console.log(pname1);
+        if (pname == "") {
+            tale.alertError("项目名不能为空");
+            return false;
+        } else {
+            tale.post({
+                url : '/admin/project/modify',
+                data: {param:pname,param1:pname1},
+                success: function (result) {
+                    if(result && result.code == 'success'){
+                        tale.alertOk({
+                            text:'保存成功',
+                            then: function () {
+                                setTimeout(function () {
+                                    window.location.href = '/admin/project';
+                                }, 500);
+                            }
+                        });
+                    } else {
+                        tale.alertError(result.msg || '保存失败');
+                    }
+                }
+            });
+        }
+
+    }
+
+
+    /*]]>*/
+</script>
+</body>
+</html>

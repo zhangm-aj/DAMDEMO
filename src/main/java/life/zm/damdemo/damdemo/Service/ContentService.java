@@ -8,7 +8,7 @@ package life.zm.damdemo.damdemo.Service;
 import com.github.pagehelper.PageInfo;
 import life.zm.damdemo.damdemo.dto.cond.ContentCond;
 import life.zm.damdemo.damdemo.model.ContentDomain;
-import life.zm.damdemo.damdemo.model.MetaDomain;
+
 
 
 import java.util.List;
@@ -57,6 +57,8 @@ public interface ContentService {
      * @param content
      */
     void updateContentByCid(ContentDomain content);
+
+    PageInfo<ContentDomain> getArticlesByConds(ContentCond contentCond, int page, int limit);
 
     /**
      * 通过分类获取文章

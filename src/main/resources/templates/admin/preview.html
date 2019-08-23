@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>BIMFACE-工程文件的在线浏览及数据服务</title>
+  <meta name="keywords" content="BIMFACE,BIM,模型,轻量化,模型轻量化,建筑,工程文件,Revit,CAD,SketchUp,Navisworks,3ds Max"/>
+  <meta name="description" content="BIMFACE面向工程建筑领域，提供了Revit模型、CAD图纸等多种工程文件的轻量化浏览及数据服务。 建筑领域的开发者，可以基于BIMFACE的基础服务，根据最终用户的需求，开发出贴合特定场景的应用。"/>
+  <link rel="shortcut icon" href="https://static.bimface.com/favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="https://static.bimface.com/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" >
+  <style>
+    a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,hr,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,textarea,tfoot,th,thead,time,tr,tt,u,ul,var,video {
+      margin: 0;
+      padding: 0;
+      border: 0
+    }
+
+    html {
+      -webkit-text-size-adjust: none
+    }
+
+    body {
+      font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #333;
+      background-color: #eee
+    }
+
+    img {
+      outline: none;
+      vertical-align: middle
+    }
+
+    nav,ol,ul {
+      list-style: none
+    }
+
+    a {
+      color: #4a90e2;
+      text-decoration: none;
+      outline: none
+    }
+
+    table {
+      border-collapse: collapse
+    }
+
+    input,select {
+      border: 0 none;
+      vertical-align: middle;
+      outline: none
+    }
+
+    a:hover {
+      text-decoration: underline
+    }
+
+    .clearfix:after {
+      content: " ";
+      display: block;
+      height: 0;
+      clear: both
+    }
+
+    .clearfix {
+      zoom:1}
+
+    .bg {
+      background: #fff;
+      min-width: 1200px
+    }
+
+    .w1200 {
+      width: 1200px;
+      margin: 0 auto
+    }
+
+
+
+    .btnbim {
+      display: inline-block;
+      text-align: center;
+      border: none;
+      border-radius: 3px;
+      outline: none;
+      box-sizing: border-box;
+      cursor: pointer
+    }
+
+    .btnbim,.btnbim:hover {
+      text-decoration: none
+    }
+
+    .btnbim.btnbim-primary {
+      background: #11dab7;
+      color: #fff
+    }
+
+    .btnbim.btnbim-primary:hover {
+      background: #0feac3
+    }
+
+    .btnbim.btnbim-default {
+      background: transparent;
+      color: #11dab7;
+      border: 1px solid #11dab7
+    }
+
+    .btnbim.btnbim-default:hover {
+      color: #0feac3;
+      border: 1px solid #0feac3
+    }
+
+    .btnbim.btnbim-disable {
+      background: #eee;
+      cursor: default
+    }
+
+    .btnbim.btnbim-disable,.btnbim.btnbim-disable:hover {
+      color: #ccc;
+      border: 1px solid #ccc
+    }
+    .btnbim.btnbim-yellow {
+      background: #f99d0b;
+      color: #fff
+    }
+
+    .btnbim.btnbim-yellow:hover {
+      background: #e99002
+    }
+    .btnbim.btnbim-sm {
+      padding: 0 20px;
+      line-height: 28px
+    }
+
+    .btnbim.btnbim-md {
+      width: 120px;
+      height: 40px;
+      line-height: 40px
+    }
+
+    .btnbim.btnbim-big {
+      font-size: 20px;
+      width: 280px;
+      height: 60px;
+      line-height: 60px
+    }
+
+    /* Let's get this party started */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height:8px;
+      position: relative;
+    }
+    /* Track */
+    ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+      -webkit-border-radius: 4px;
+      border-radius: 6px;
+    }
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      -webkit-border-radius: 6px;
+      border-radius: 6px;
+      background: rgba(204,204,204,0.4);
+      -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.15);
+    }
+    ::-webkit-scrollbar-thumb:window-inactive {
+      background: rgba(204,204,204,0.3);
+    }
+
+    .containerbim {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .containerbim {
+
+    }
+
+    .warning {
+      color: #ff2626;
+    }
+
+    .failed, .failure {
+      color: red
+    }
+
+    .null {
+      color: #ccc;
+    }
+
+    .success {
+      color: #11dab7
+    }
+
+    .tabbim {
+      overflow: hidden;
+    }
+
+    .tabbim li {
+      float: left;
+      line-height: 50px;
+      padding: 0 40px;
+      background-color: #d7d7d7;
+      color: #666;
+      cursor: pointer;
+    }
+
+    .tabbim li:hover {
+      color: #333;
+    }
+
+    .tabbim li.on {
+      background-color: #fff;
+      color: #333;
+    }
+
+    .tab-box {
+      padding: 20px;
+      background-color: #fff;
+    }
+
+    .table-list {
+      margin-top: 20px;
+      width: 100%;
+      border-top: 1px solid #ccc
+    }
+
+    .table-list th {
+      color: #999;
+      text-align: left;
+      font-weight: 400;
+      background-color: #eee
+    }
+
+    .table-list td, .table-list th {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      vertical-align: top;
+      line-height: 2;
+      word-break: break-all
+    }
+
+    .table-list td a, .table-list th a {
+      margin-right: 10px
+    }
+
+    .table-list td span.disable {
+      margin-right: 10px;
+      color:#ccc;
+    }
+
+    .popup-mask {
+      display: none;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, .2);
+      top: 0;
+      left: 0;
+      z-index: 199
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 200
+    }
+
+    .popup .close {
+      float: right;
+      font-size: 20px;
+      color: #fff;
+      position: absolute;
+      right: 10px;
+      top: 4px;
+      cursor: pointer
+    }
+
+    .popup .close:hover {
+      text-decoration: none;
+      color: #0cf
+    }
+
+    .popup .tit {
+      background-color: #2c2c2c;
+      color: #fff;
+      line-height: 40px;
+      padding: 0 10px
+    }
+
+    .popup .content {
+      border: 1px solid #fff;
+      padding: 10px;
+      background-color: #fff
+    }
+
+    .popup .content .note {
+      padding: 15px 0;
+      text-align: center;
+      color: red;
+      background-color: #ffdedc
+    }
+
+    .popup .content table {
+      width: 100%;
+      margin-top: 10px;
+      font-size: 12px
+    }
+
+    .popup .content table td, .popup .content table th {
+      padding: 5px;
+      text-align: left
+    }
+
+    .popup .content table th {
+      background-color: #f2f2f2;
+      font-size: 14px
+    }
+
+    .popup .content table td {
+      border-bottom: 1px solid #ddd
+    }
+
+    .popup.popup-upload {
+      width: 600px
+    }
+
+    .popup.popup-upload .content {
+      height: 320px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .popup.popup-upload .content .step p {
+      margin-top: 20px;
+      color: #999;
+      line-height: 1.8
+    }
+
+    .popup.popup-upload .content .step i {
+      font-style: normal
+    }
+
+    .popup.popup-upload .content .step .tips {
+      margin-bottom: 20px;
+      line-height: 1.8
+    }
+
+    .popup.popup-upload .content .step input {
+      height: 40px;
+      line-height: 40px;
+      width: 300px;
+      padding: 0 10px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      vertical-align: top
+    }
+
+    .control .command {
+      margin-left: 40px;
+      display: inline-block;
+      vertical-align: middle;
+      overflow: hidden;
+    }
+
+    .control .command a {
+      float: left;
+      width: auto;
+      padding: 0 20px;
+      border: 1px solid #ccc;
+      border-right: 0 none;
+      border-radius: 0;
+      background-color: #f2f2f2;
+      color: #666;
+    }
+
+    .control .command a:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    .control .command a:last-child {
+      border-radius: 0 4px 4px 0;
+      border-right: 1px solid #ccc;
+    }
+
+    .control .command a:hover {
+      background-color: #fff;
+      color: #333;
+    }
+
+    .control .command a.btnbim-disable {
+      cursor: default;
+      background-color: #eee;
+      color:#999;
+    }
+    .control .command a.btnbim-disable:hover {
+      border-right: 0 none;
+      cursor: default;
+      background-color: #eee;
+      color:#999;
+    }
+    .control .command a.btnbim-disable:last-child {
+      border-radius: 0 4px 4px 0;
+      border-right: 1px solid #ccc;
+    }
+
+    .popup-integrate .content {
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .popup-integrate .content .type {
+      text-align: center;
+      line-height: 40px;
+      background-color: #e7e7e7;
+    }
+
+    .popup-integrate dd {
+      height: 300px;
+      overflow-y: auto;
+    }
+
+    .popup-integrate .side {
+      width: 300px;
+      float: left;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+    }
+
+    .popup-integrate .main {
+      width: 438px;
+      float: left;
+      margin-left: 20px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+    }
+
+    .popup-integrate .set {
+      clear: left;
+      padding-top: 20px;
+    }
+
+    .popup-integrate .set input {
+      border: 1px solid #ccc;
+      height: 38px;
+      vertical-align: top;
+      padding: 0 10px;
+      margin-right: 5px;
+      width: 607px;;
+    }
+
+    .popup-integrate dt {
+      overflow: hidden;
+    }
+
+    .popup-integrate dt span {
+      float: left;
+      box-sizing: border-box;
+      height: 40px;;
+      padding: 10px 5px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .popup-integrate dt .right {
+      text-align: right;
+    }
+
+    .popup-integrate dt span.w200 {
+      width: 200px;
+    }
+
+    .popup-integrate dt span.w240 {
+      width: 240px;
+    }
+
+    .popup-integrate dt span.w100 {
+      width: 98px;
+    }
+
+    .popup.popup-integrate .content table {
+      margin-top: 0;
+    }
+
+    .popup.popup-integrate .content table td.right {
+      text-align: right;
+    }
+
+    .popup.popup-integrate table td input.w88 {
+      width: 88px;
+      padding: 5px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+    }
+
+    .popup-list .content {
+      padding: 0px;
+    }
+
+    .popup-list .content .list {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .popup-list .content .list span {
+      display: inline-block;
+      width: 90px;
+      text-align: right;
+    }
+    .popup-list .content .list span.name {
+      width:298px;
+      text-align: left;
+    }
+
+    .popup-list .content .list li {
+      line-height: 30px;
+      border-bottom: 1px solid #ddd;
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+
+    .popup-list .content .list li:last-child {
+      border-bottom: 0 none;
+    }
+    .table-upload {
+      border: 1px solid #ccc
+    }
+    .table-upload .table-list {
+      border-top: 0 none;
+      margin-top: 0
+    }
+    .table-upload .overflow {
+      height: 244px;
+      overflow: auto
+    }
+    .table-upload .overflow li {
+      height: 48px;
+      line-height: 48px;
+      overflow: hidden;
+      border-bottom: 1px solid #ccc;
+      position: relative
+    }
+    .table-upload .overflow li i {
+      display: block;
+      height: 48px;
+      background-color: #efffe6
+    }
+    .table-upload .overflow li .text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      text-align: left;
+    }
+    .table-upload .overflow li .text div {
+      float: left;
+      padding: 0 10px;
+      box-sizing: border-box
+    }
+    .table-upload .name {
+      width: 60%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      text-align: left;
+    }
+
+    .table-upload .size,.table-upload .state {
+      width: 20%
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="/" class="logo"></a>
+    <h2>基于BIMFACE快速入门<i>官方示例</i></h2>
+    <div class="btnbim-box">
+      <a href="#" target="_blank" class="btnbim btnbim-sm btnbim-primary">源代码</a>
+      <a href="#" class="btnbim btnbim-sm btnbim-primary">详情介绍</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="view"></div>
+  </div>
+
+  <footer>
+    <div class="w1200">
+      <div class="copyright">
+        Copyright &copy;2016-2018 <a href="http://bimface.com" target="_blank">BIMFACE</a> 京ICP备10021606号-19 <a href="http://www.glodon.com/" target="_blank">广联达</a>旗下产品
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://static.bimface.com/developer/libs/jquery.js"></script>
+  <script src="https://static.bimface.com/api/BimfaceSDKLoader/BimfaceSDKLoader@latest-release.js" charset="utf-8"></script>
+  <script>
+    $(function(){
+      var _height = window.innerHeight - 105;
+      $('#view').height((_height - 40) + 'px');
+
+      var _fileId = GetQueryString('fileId');
+      console.log(_fileId)
+      var _integrateId = GetQueryString('integrateId');
+      if(_fileId){
+        $.get('/admin/project/file/view_token?fileId='+_fileId,function(res){
+          showView(res);
+        })
+      } else {
+        $.get('integrate/view_token?integrateId='+_integrateId,function(res){
+          showView(res);
+        })
+      }
+    })
+
+    function showView(viewToken){
+      var options = new BimfaceSDKLoaderConfig();
+      options.viewToken = viewToken;
+      BimfaceSDKLoader.load(options, successCallback, failureCallback);
+      function successCallback(viewMetaData) {
+        var dom4Show = document.getElementById('view');
+        new Glodon.Bimface.Application.WebApplicationDemo(viewMetaData, dom4Show);
+      }
+      function failureCallback(error) {
+        console.log(error);
+      };
+    }
+
+    function GetQueryString(name){
+      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      if(r!=null)return  unescape(r[2]); return null;
+    }
+  </script>
+</body>
+</html>

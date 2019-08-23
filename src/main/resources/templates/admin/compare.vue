@@ -1,0 +1,367 @@
+<template>
+  <div id="app">
+    <header>
+      <a class="logo"></a>
+      <h2>{{name}}</h2>
+    </header>
+
+    <div class="wrap" style="top:50px; bottom: 40px;" id="wrap-compare">
+      <div class="container container-view" v-if="errorNote==''" style="height: 100%">
+        <div class="main-wrap">
+          <div id="bimface-viewer" style="height: 100%;"></div>
+        </div>
+        <!--  -->
+        <div class="compare-content"  style="height: 100%">
+          <div class="component-list">
+            <div class="tit">修改构件列表</div>
+            <div class="type-mode" v-if="compareList" >
+              <div class="type-box">
+                <div class="title"><i class="icon arrow"></i><i class="icon-type new"></i>新增构件（{{compareList.newItems.itemCount}}）</div>
+                <ul class="type-ul" id="addElement" v-if="compareList.newItems.itemCount > 0">
+                  <li>
+                    <div class="group"><i class="arrow"></i><i class="check checked"></i>全部</div>
+                    <ul>
+                      <li v-for="nItem in compareList.newItems.categories">
+                        <div class="categories"><i class="arrow"></i><i class="check checked"></i>{{nItem.categoryName}}</div>
+                        <ul>
+                          <li v-for="n in nItem.elements">
+                            <div class="elements" :data-oid="n.followingElementId"><i class="check checked"></i><span @click="zoomIn(n.followingFileId,n.followingElementId)">{{n.name}}</span></div>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <div class="type-box">
+                <div class="title"><i class="icon arrow"></i><i class="icon-type remove"></i>删除构件（{{compareList.deleteItems.itemCount}}）</div>
+                <ul class="type-ul" id="removeElement" v-if="compareList.deleteItems.itemCount > 0">
+                  <li>
+                    <div class="group"><i class="arrow"></i><i class="check checked"></i>全部</div>
+                    <ul>
+                      <li v-for="dItem in compareList.deleteItems.categories">
+                        <div class="categories"><i class="arrow"></i><i class="check checked"></i>{{dItem.categoryName}}</div>
+                        <ul>
+                          <li v-for="d in dItem.elements">
+                            <div class="elements" :data-oid="d.previousElementId"><i class="check checked"></i><span @click="zoomIn(d.previousFileId,d.previousElementId)">{{d.name}}</span></div>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <div class="type-box">
+                <div class="title"><i class="icon arrow"></i><i class="icon-type revise"></i>修改构件（{{compareList.changeItems.itemCount}}）</div>
+                <ul class="type-ul" id="reviseElement" v-if="compareList.changeItems.itemCount > 0">
+                  <li>
+                    <div class="group"><i class="arrow"></i><i class="check checked"></i>全部</div>
+                    <ul>
+                      <li v-for="cItem in compareList.changeItems.categories">
+                        <div class="categories"><i class="arrow"></i><i class="check checked"></i>{{cItem.categoryName}}</div>
+                        <ul>
+                          <li v-for="c in cItem.elements">
+                            <div class="categories"><i class="arrow"></i><i class="check checked"></i>{{c.name}}<a href="javascript:void(0)" @click="checkAttr(c)">查看对比结果</a></div>
+                            <ul>
+                              <li>
+                                <div class="elements" :data-oid="c.previousFileId + '.' + c.previousElementId"><i class="check checked"></i><span @click="zoomIn(c.previousFileId,c.previousElementId)">修改前构件</span></div>
+                                <div class="elements" :data-oid="c.followingElementId"><i class="check checked"></i><span @click="zoomIn(c.followingFileId,c.followingElementId)">修改后构件</span></div>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="file-list">
+            <div class="tit">对比文件列表</div>
+            <ul>
+              <li>
+                <a href="javascript:void(0)" @click="preview(previousFileId)">详情</a>
+                <span>更改前：</span>{{previousFileName}}<br />
+                <span>fileId：</span>{{previousFileId}}
+              </li>
+              <li>
+                <a href="javascript:void(0)" @click="preview(followingFileId)">详情</a>
+                <span>更改后：</span>{{followingFileName}}<br />
+                <span>fileId：</span>{{followingFileId}}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="error-note" v-else>
+        <div class='div-table-is-empty'>
+            <div class="img-empty-icon" :class="[imgName]"></div>
+            <div class="div-tip">{{ errorNote }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pop-changeAttr" v-if="show">
+      <div class="popup-mask" style="left:0;"></div>
+      <div class="popup" style="width: 600px;">
+        <a class="close" @click="close">×</a>
+        <div class="tit">属性对比结果</div>
+        <div class="content">
+          <p>有 <span class="num">{{attrArray.diffNum}}</span> 处属性被修改。</p>
+          <table cellpadding="0" cellspacing="0">
+            <tr>
+              <th>变更属性</th>
+              <th width="190">修改前</th>
+              <th width="190">修改后</th>
+            </tr>
+            <template v-for="item in attrArray.properties">
+              <tr class="bg">
+                <td colspan="3">{{item.group}}</td>
+              </tr>
+              <tr v-for="ele in item.compareAttributes" :class="{'bg-revise':ele.changed}">
+                <td>{{ele.key}}</td>
+                <td v-if="ele.previousValue.length == 0">-</td>
+                <td v-else="ele.previousValue.length == 0">{{ele.previousValue}}</td>
+                <td v-if="ele.followingValue.length == 0">-</td>
+                <td v-else="ele.followingValue.length == 0">{{ele.followingValue}}</td>
+              </tr>
+            </template>
+
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <alert></alert>
+    <footer-tpl style="height: 40px;"></footer-tpl>
+  </div>
+</template>
+
+<script>
+  import './less/compare.less'
+  import Api from '../../api/api'
+  import store from '../../vuex/store'
+  import Vue from 'vue'
+  import footerTpl from '../../components/footer'
+  Vue.component('footerTpl', footerTpl)
+
+  export default {
+    data(){
+      return {
+        appKey:'',
+        contentId:'',
+        name:'',
+        previousFileId:null,
+        previousFileName:'',
+        followingFileId:null,
+        followingFileName:'',
+        compareList:null,
+        allArray:[],
+        attrArray:null,
+        show:false,
+        errorNote: '',
+        imgName: 'exception-warning',
+        // todo
+        // imgName: 'exception-warning',
+        // errorNote: '模型对比失败',
+      }
+    },
+
+    computed:{
+      previewHeight(){
+        return store.state.previewHeight;
+      }
+    },
+
+    created(){
+      var _height = document.documentElement.clientHeight - 50;
+      store.commit('PREVIEW_HEIGHT',_height);
+
+      this.appKey = CUJs.String.getQueryString('appKey');
+      this.contentId = CUJs.String.getQueryString('sourceId');
+    },
+
+    mounted(){
+      var that = this;
+      window.onresize = function(){
+        var _height = document.documentElement.clientHeight - 50;
+        store.commit('PREVIEW_HEIGHT',_height);
+      }
+
+      this.$http.get(`${Api.url.compareStatus}?appKey=${this.appKey}&compareId=${this.contentId}`).then((res)=> {
+        if(res.data.data.status == 'success'){
+          this.name = res.data.data.name;
+          document.title = this.name + document.title;
+          this.previousFileId = res.data.data.previousFileId;
+          this.previousFileName = res.data.data.previousFileName;
+          this.followingFileId = res.data.data.followingFileId;
+          this.followingFileName = res.data.data.followingFileName;
+
+          this.$http.get(`${Api.url.viewtoken2}?appKey=${this.appKey}&fileId=${this.followingFileId}`).then((res)=>{
+            if(res.data.code == 'success'){
+              var viewToken = res.data.data;
+
+              var options = new BimfaceSDKLoaderConfig();
+              options.viewToken = viewToken;
+              BimfaceSDKLoader.load(options, successCallback, failureCallback);
+
+              function successCallback() {
+                // 获取DOM元素
+                var dom4Show = document.getElementById('bimface-viewer');
+
+                // 配置参数
+                var config = new Glodon.Bimface.Application.WebApplication3DConfig();
+                config.domElement = dom4Show;
+                var app = new Glodon.Bimface.Application.WebApplication3D(config);
+
+                // 创建viewer3D对象
+                window.viewer3D = app.getViewer();
+
+                // 添加模型
+                viewer3D.addView(viewToken);
+
+                // 监听添加view完成的事件
+                viewer3D.addEventListener(Glodon.Bimface.Viewer.Viewer3DEvent.ViewAdded, function() {
+                  that.$http.get(`${Api.url.compareViewToken}?appKey=${that.appKey}&compareId=${that.contentId}`).then((res)=>{
+                    viewer3D.addView(res.data.data);
+                    that.getResult();
+                  })
+                })
+
+                viewer3D.addEventListener(Glodon.Bimface.Viewer.Viewer3DEvent.Error, function() {
+                  that.$http.get(`${Api.url.compareViewToken}?appKey=${that.appKey}&compareId=${that.contentId}`).then((res)=>{
+                    viewer3D.addView(res.data.data);
+                    that.getResult();
+                  })
+                })
+              }
+
+              function failureCallback(error) {
+                console.log(error);
+              };
+
+            }
+          })
+        } else if(res.data.data.status == 'failed'){
+          this.errorNote = '对比失败，无法正常浏览'
+          this.imgName = 'exception-warning'
+        } else if(res.data.data.status == 'processing'){
+          this.errorNote = '对比进行中，请稍后查看'
+          this.imgName = 'exception-processing'
+        } else if(res.data.data.status == 'prepare'){
+          this.errorNote = '对比进行中，请稍后查看'
+          this.imgName = 'exception-processing'
+        }
+      })
+
+      this.tabFn();
+    },
+
+    methods: {
+      //  todo jq
+      tabFn: function(){
+        var that = this;
+        $('body').on('click','.title',function(){
+          $(this).next().toggle();
+          $(this).find('.icon').toggleClass('close');
+        })
+
+        $('body').on('click','.arrow',function(){
+          $(this).toggleClass('close');
+          $(this).parent().next().toggleClass('close');
+        })
+
+        $('body').on('click','.check',function(){
+          let _this = $(this);
+          if(_this.hasClass('checked')){
+            _this.removeClass('checked');
+            _this.parent().next('ul').find('.check').removeClass('checked');
+          } else {
+            _this.addClass('checked');
+            _this.parent().next('ul').find('.check').addClass('checked');
+          }
+          that.isCheckTree(_this);
+
+          let showElements = [];
+          let hideElements = [];
+          $('.elements .check').each(function(){
+            if(!$(this).hasClass('checked')){
+              let hide_oid =$(this).parent().attr('data-oid');
+              hideElements.push(hide_oid);
+            } else {
+              let show_oid =$(this).parent().attr('data-oid');
+              showElements.push(show_oid);
+            }
+          })
+          viewer3D.showComponents(showElements);
+          viewer3D.hideComponents(hideElements);
+          viewer3D.render();
+        })
+      },
+      //  todo jq
+      getResult: function(){
+        this.$http.get(`${Api.url.compareResult}?appKey=${this.appKey}&compareId=${this.contentId}`).then((res)=> {
+          if(res.data.code == 'success'){
+            this.compareList = res.data.data;
+            let [addArray,removeArray,reviseArray] = [[],[],[]];
+            $('#addElement .elements').each(function(){
+              addArray.push($(this).attr('data-oid'));
+            })
+            $('#removeElement .elements').each(function(){
+              removeArray.push($(this).attr('data-oid'));
+            })
+            $('#reviseElement .elements').each(function(){
+              reviseArray.push($(this).attr('data-oid'));
+            })
+            this.allArray = addArray.concat(removeArray).concat(reviseArray);
+            viewer3D.overrideComponentsColorById(addArray,new Glodon.Web.Graphics.Color(0,164,58,1));
+            viewer3D.overrideComponentsColorById(removeArray,new Glodon.Web.Graphics.Color(253,2,0,1));
+            viewer3D.overrideComponentsColorById(reviseArray,new Glodon.Web.Graphics.Color(234,208,56,1));
+            viewer3D.isolateComponentsById(this.allArray, Glodon.Bimface.Viewer.IsolateOption.MakeOthersTranslucent);
+            viewer3D.render();
+          }
+        })
+      },
+      //  todo jq
+      isCheckTree: function(dom){
+        let _dom = dom.parent().parent().parent();
+        if(!dom.parent().hasClass('group')){
+          if(_dom.find('.checked').length == 0){
+            _dom.siblings().find('.check').removeClass('checked');
+          } else {
+            _dom.siblings().find('.check').addClass('checked');
+          }
+          this.isCheckTree(_dom.siblings().find('.check'));
+        }
+      },
+
+      checkAttr: function(data){
+        this.$http.get(`${Api.url.compareElement}?appKey=${this.appKey}&compareId=${this.contentId}&followingElementId=${data.followingElementId}&followingFileId=${data.followingFileId}&previousElementId=${data.previousElementId}&previousFileId=${data.previousFileId}`).then((res)=>{
+          if(res.data.code == 'success'){
+            this.attrArray = res.data.data;
+            this.show = true;
+          }
+        })
+      },
+
+      zoomIn: function(fid,eid){
+        this.$http.get(`${Api.url.elementProperty}?appKey=${this.appKey}&fileId=${fid}&elementId=${eid}`).then((res)=>{
+          if(res.data.code == 'success'){
+            viewer3D.zoomToBoundingBox(res.data.data.boundingBox);
+            viewer3D.render();
+          }
+        })
+      },
+
+      close: function(){
+        this.show = false;
+      },
+
+      preview:function(fileId){
+        window.open(`${Api.url.preview}?fileId=${fileId}&appKey=${this.appKey}`);
+      }
+    }
+  }
+</script>

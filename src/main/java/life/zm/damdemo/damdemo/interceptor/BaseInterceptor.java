@@ -2,7 +2,11 @@ package life.zm.damdemo.damdemo.interceptor;
 
 
 import life.zm.damdemo.damdemo.Service.UserService;
+import life.zm.damdemo.damdemo.constant.Types;
 import life.zm.damdemo.damdemo.constant.WebConst;
+import life.zm.damdemo.damdemo.dto.MetaDto;
+import life.zm.damdemo.damdemo.dto.StatisticsDto;
+import life.zm.damdemo.damdemo.model.OptionsDomain;
 import life.zm.damdemo.damdemo.model.UserDomain;
 import life.zm.damdemo.damdemo.utils.*;
 import org.slf4j.Logger;
@@ -95,36 +99,13 @@ public class BaseInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView view) throws Exception {
-        OptionsDomain ov = optionService.getOptionByName("site_record");
-        // 分类总数
-        Long categoryCount = metaService.getMetasCountByType(Types.CATEGORY.getType());
-        // 标签总数
-        Long tagCount = metaService.getMetasCountByType(Types.TAG.getType());
-        // 获取文章总数
-        StatisticsDto statistics = siteService.getStatistics();
-        // 获取友情链接
-        List<MetaDto> links = metaService.getMetaList(Types.LINK.getType(),null,WebConst.MAX_POSTS);
 
-        session.setAttribute("categoryCount",categoryCount);
-        session.setAttribute("tagCount",tagCount);
-        session.setAttribute("articleCount",statistics.getArticles());
-        session.setAttribute("links",links);
+
         request.setAttribute("commons", commons);
-        request.setAttribute("option", ov);
         request.setAttribute("adminCommons", adminCommons);
-        initSiteConfig(request);
+
     }
 
-    private void initSiteConfig(HttpServletRequest request) {
-        if (WebConst.initConfig.isEmpty()) {
-            List<OptionsDomain> options = optionService.getOptions();
-            Map<String, String> querys = new HashMap<>();
-            options.forEach(option -> {
-                querys.put(option.getName(),option.getValue());
-            });
-            WebConst.initConfig = querys;
-        }
-    }
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {

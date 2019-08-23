@@ -10,12 +10,12 @@ import com.github.pagehelper.PageInfo;
 
 import life.zm.damdemo.damdemo.constant.ErrorConstant;
 import life.zm.damdemo.damdemo.constant.WebConst;
-import life.zm.damdemo.damdemo.dao.ContentDao;
+import life.zm.damdemo.damdemo.dao.mapper.ContentDao;
 import life.zm.damdemo.damdemo.dto.cond.ContentCond;
 import life.zm.damdemo.damdemo.exception.BusinessException;
 
 import life.zm.damdemo.damdemo.model.ContentDomain;
-import life.zm.damdemo.damdemo.model.MetaDomain;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -31,14 +31,7 @@ public class ContentServiceImpl implements ContentService {
     @Autowired
     private ContentDao contentDao;
 
-//    @Autowired
-//    private MetaService metaService;
-//
-//    @Autowired
-//    private RelationShipDao relationShipDao;
 
-//    @Autowired
-//    private CommentDao commentDao;
 
     @Transactional
     @Override
@@ -77,11 +70,11 @@ public class ContentServiceImpl implements ContentService {
     @CacheEvict(value = {"articleCache", "articleCaches"}, allEntries = true, beforeInvocation = true)
     public void updateArticleById(ContentDomain contentDomain) {
         // 标签和分类
-        String tags = contentDomain.getTags();
+        //String tags = contentDomain.getTags();
 
         // 更新文章
         contentDao.updateArticleById(contentDomain);
-        int cid = contentDomain.getCid();
+       // int cid = contentDomain.getCid();
 //        relationShipDao.deleteRelationShipByCid(cid);
 //        metaService.addMetas(cid,tags,Types.TAG.getType());
 
@@ -95,6 +88,17 @@ public class ContentServiceImpl implements ContentService {
             throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
         PageHelper.startPage(pageNum,pageSize);
         List<ContentDomain> contents = contentDao.getArticleByCond(contentCond);
+        PageInfo<ContentDomain> pageInfo = new PageInfo<>(contents);
+        return pageInfo;
+    }
+
+    @Override
+    @Cacheable(value = "articleCaches", key = "'articlesByCond_' + #p1 + 'type_' + #p0.type")
+    public PageInfo<ContentDomain> getArticlesByConds(ContentCond contentCond, int pageNum, int pageSize) {
+        if (null == contentCond)
+            throw BusinessException.withErrorCode(ErrorConstant.Common.PARAM_IS_EMPTY);
+        PageHelper.startPage(pageNum,pageSize);
+        List<ContentDomain> contents = contentDao.getArticleByConds(contentCond);
         PageInfo<ContentDomain> pageInfo = new PageInfo<>(contents);
         return pageInfo;
     }

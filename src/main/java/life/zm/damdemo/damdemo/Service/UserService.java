@@ -16,4 +16,6 @@ public interface UserService {
     void updateUserPassword(UserDomain temp);
 
     UserDomain login(String username, String password);
+
+    UserDomain getUserInfoById(Integer uid);
 }

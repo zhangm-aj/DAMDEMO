@@ -1,11 +1,9 @@
 package life.zm.damdemo.damdemo.Service;
 
-import life.zm.damdemo.damdemo.constant.ErrorConstant;
-import life.zm.damdemo.damdemo.dao.UserDao;
+import life.zm.damdemo.damdemo.dao.mapper.UserDao;
 import life.zm.damdemo.damdemo.model.UserDomain;
 
 import life.zm.damdemo.damdemo.utils.TaleUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,7 +47,12 @@ public class UserServiceImpl implements UserService{
        return  userDao.login(username, pwd);
 
     }
+
+    @Override
+    public UserDomain getUserInfoById(Integer uid) {
+        return userDao.getUserInfoById(uid);
     }
+}
 
 
 

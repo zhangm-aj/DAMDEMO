@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='项目管理',active='project'">
+<header th:replace="admin/fragments/header::headerFragment(${title},${active})"></header>
+<body class="fixed-left">
+<div id="wrapper">
+    <div th:replace="admin/fragments/header::header-body"></div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <a th:href="@{/admin/project/newpro}" style="text-align: center"><button>新建项目</button></a>
+                    </div>
+                    <div class="col-md-12">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th width="25%">项目名称</th>
+
+                                <th >发布时间</th>
+
+                                <th>操作</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            <th:block th:each="post : ${projects.list}">
+                                <tr th:pid="${post.pid}">
+
+                                    <td>
+                                        <a th:href="@{'/admin/project/'+${post.pid}}" th:text="${post.pname}"></a>
+                                    </td>
+
+                                    <td><th:block th:text="${commons.fmtdate(post.created, 'yyyy-MM-dd HH:mm:ss')}"/></td>
+
+
+                                    <td>
+                                        <a th:href="@{'/admin/project/rename/'+${post.pid}}" class="btn btn-primary btn-sm waves-effect waves-light m-b-5">
+                                            <i class="fa fa-edit"></i> <span>重命名</span>
+                                        </a>
+                                        <a href="javascript:void(0)" th:onclick="'delPost('+${post.pid}+');'" class="btn btn-danger btn-sm waves-effect waves-light m-b-5">
+                                            <i class="fa fa-trash-o"></i> <span>删除</span>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                            </th:block>
+
+                            </tbody>
+                        </table>
+                        <div th:replace="comm/macros :: pageAdminNav(${projects})"></div>
+                    </div>
+                </div>
+                </div>
+                <div th:replace="admin/fragments/footer :: footer-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div th:replace="admin/fragments/footer :: footer"></div>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var tale = new $.tale();
+    function delPost(pid) {
+        tale.alertConfirm({
+            title:'确定删除该项目吗?',
+            then: function () {
+                tale.post({
+                    url : '/admin/project/delete',
+                    data: {pid: pid},
+                    success: function (result) {
+                        if(result && result.code == 'success'){
+                            tale.alertOkAndReload('项目删除成功');
+                        } else {
+                            tale.alertError(result.msg || '项目删除失败');
+                        }
+                    }
+                });
+            }
+        });
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

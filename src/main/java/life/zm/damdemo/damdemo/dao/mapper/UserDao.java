@@ -1,9 +1,10 @@
-package life.zm.damdemo.damdemo.dao;
+package life.zm.damdemo.damdemo.dao.mapper;
 
 import life.zm.damdemo.damdemo.model.UserDomain;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 ;
-
+@Repository
 @Mapper
 public interface UserDao {
 
@@ -21,4 +22,6 @@ public interface UserDao {
 
     @Select("select * from dam_user where username = #{username} and password = #{pwd}")
     UserDomain login(@Param("username") String username, @Param("pwd") String pwd);
+    @Select("select * from dam_user where uid = #{uid}")
+    UserDomain getUserInfoById(Integer uid);
 }

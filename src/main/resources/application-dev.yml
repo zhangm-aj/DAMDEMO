@@ -46,7 +46,7 @@ spring:
 
 logging:
   level:
-    com.wip.dao: DEBUG
+    life.zm.damdemo.damdemo: DEBUG
 
 
 

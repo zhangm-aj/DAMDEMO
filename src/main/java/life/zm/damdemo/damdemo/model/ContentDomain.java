@@ -22,7 +22,15 @@ public class ContentDomain {
      * 内容标题
      */
     private String title;
+    private String username;
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     /**
      * 内容生成时的GMT unix时间戳

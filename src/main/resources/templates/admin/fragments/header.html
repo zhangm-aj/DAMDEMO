@@ -7,6 +7,8 @@
     <meta content="Coderthemes" name="author"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <link rel="shortcut icon" th:href="@{/admin/images/favicon11.png}"/>
+    <script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+    <script src="http://malsup.github.io/jquery.form.js"></script>
     <link th:href="@{//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
     <link th:href="@{//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet"/>
     <link th:href="@{/admin/css/style.min.css}" rel="stylesheet" type="text/css"/>
@@ -101,10 +103,10 @@
                        th:class="${active}=='category'?'waves-effect active':'waves-effect'"><i
                             class="fa fa-tags" aria-hidden="true"></i><span> 分类/标签 </span></a>
                 </li>
-                <li th:class="${active}=='attach'?'active':''">
-                    <a th:href="@{/admin/attach}"
-                       th:class="${active}=='attach'?'waves-effect active':'waves-effect'"><i
-                            class="fa fa-cloud-upload" aria-hidden="true"></i><span> 文件管理 </span></a>
+                <li th:class="${active}=='project'?'active':''">
+                    <a th:href="@{/admin/project}"
+                       th:class="${active}=='project'?'waves-effect active':'waves-effect'"><i
+                            class="fa fa-cloud-upload" aria-hidden="true"></i><span> 项目管理 </span></a>
                 </li>
                 <li th:class="${active}=='links'?'active':''">
                     <a th:href="@{/admin/links}" th:class="${active}=='links'?'waves-effect active':'waves-effect'"><i

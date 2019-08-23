@@ -1,7 +1,4 @@
 package life.zm.damdemo.damdemo.controller.admin;
-
-
-
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,18 +6,18 @@ import io.swagger.annotations.ApiParam;
 import life.zm.damdemo.damdemo.Service.ContentService;
 import life.zm.damdemo.damdemo.controller.BaseController;
 import life.zm.damdemo.damdemo.dto.cond.ContentCond;
-import life.zm.damdemo.damdemo.dto.cond.MetaCond;
 import life.zm.damdemo.damdemo.model.ContentDomain;
 import life.zm.damdemo.damdemo.model.UserDomain;
 import life.zm.damdemo.damdemo.utils.APIResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+
 import javax.servlet.http.HttpServletRequest;
+
 
 
 @Api("文章管理")
@@ -29,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 public class ArticleController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleController.class);
-
 
 
     @Autowired
@@ -44,10 +40,36 @@ public class ArticleController extends BaseController {
             @RequestParam(name = "page", required = false, defaultValue = "1")
                     int page,
             @ApiParam(name = "limit", value = "每页数量", required = false)
-            @RequestParam(name = "limit", required = false, defaultValue = "15")
+            @RequestParam(name = "limit", required = false, defaultValue = "6")
                     int limit
     ) {
-        PageInfo<ContentDomain> articles = contentService.getArticlesByCond(new ContentCond(), page, limit);
+        ContentCond contentCond = new ContentCond();
+
+        PageInfo<ContentDomain> articles = contentService.getArticlesByCond(contentCond, page, limit);
+        request.setAttribute("articles",articles);
+
+        return "admin/article_list";
+    }
+    @ApiOperation("文章页")
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public String search(
+            HttpServletRequest request,
+           @RequestParam(name = "title")String title,
+           @RequestParam(name = "username")String username,
+           @RequestParam(name = "tags")String tags,
+            @ApiParam(name = "page", value = "页数", required = false)
+            @RequestParam(name = "page", required = false, defaultValue = "1")
+                    int page,
+            @ApiParam(name = "limit", value = "每页数量", required = false)
+            @RequestParam(name = "limit", required = false, defaultValue = "6")
+                    int limit
+
+    ) {
+        ContentCond contentCond = new ContentCond();
+        contentCond.setTitle(title);
+        contentCond.setUsername(username);
+        contentCond.setTag(tags);
+        PageInfo<ContentDomain> articles = contentService.getArticlesByConds(contentCond,page,limit);
         request.setAttribute("articles",articles);
         return "admin/article_list";
     }
@@ -68,9 +90,10 @@ public class ArticleController extends BaseController {
     ) {
         ContentDomain content = contentService.getArticleById(cid);
         request.setAttribute("contents", content);
-        MetaCond metaCond = new MetaCond();
+
         request.setAttribute("active", "article");
         return "admin/article_edit";
+
     }
 
     @ApiOperation("编辑保存文章")
@@ -95,14 +118,27 @@ public class ArticleController extends BaseController {
             @ApiParam(name = "tags", value = "标签", required = false)
             @RequestParam(name = "tags", required = false)
                     String tags
-    ) {
+
+    ) { //获取登录人的姓名
+        UserDomain users = this.user(request);
         ContentDomain contentDomain = new ContentDomain();
+        //获取它的cid
+        contentDomain.setCid(cid);
+        //判断用户名是否一样
+        String username = contentService.getArticleById(cid).getUsername();
+
+        if(!users.getUsername().equals(username )){
+
+            return APIResponse.fail("您无权修改该文章");
+        }
+
         contentDomain.setTitle(title);
 
+        contentDomain.setAuthorId(users.getUid());
         contentDomain.setContent(content);
-
         contentDomain.setStatus(status);
         contentDomain.setTags(tags);
+        contentDomain.setUsername(username);
 
        // contentDomain.setAllowComment(allowComment ? 1: 0);
         contentService.updateArticleById(contentDomain);
@@ -131,6 +167,7 @@ public class ArticleController extends BaseController {
                     String tags,
             HttpServletRequest request
     ) {
+
         ContentDomain contentDomain = new ContentDomain();
         contentDomain.setTitle(title);
         contentDomain.setContent(content);
@@ -142,7 +179,7 @@ public class ArticleController extends BaseController {
         // 只允许博客文章有分类，防止作品被收入分类
         UserDomain users = this.user(request);
         contentDomain.setAuthorId(users.getUid());
-
+        contentDomain.setUsername(users.getUsername());
         //contentDomain.setAllowComment(allowComment ? 1 : 0);
 
         // 添加文章
@@ -158,12 +195,11 @@ public class ArticleController extends BaseController {
             @ApiParam(name = "cid", value = "文章ID", required = true)
             @RequestParam(name = "cid", required = true)
                     Integer cid,
+
             HttpServletRequest request
     ) {
-        // 删除文章
+
         contentService.deleteArticleById(cid);
-        // 写入日志
-        //logService.addLog(LogActions.DEL_ARTICLE.getAction(), cid+"",request.getRemoteAddr(),this.getUid(request));
         return APIResponse.success();
     }
 

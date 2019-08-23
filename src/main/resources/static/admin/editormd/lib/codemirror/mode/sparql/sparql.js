@@ -29,7 +29,7 @@ CodeMirror.defineMode("sparql", function(config) {
   var keywords = wordRegexp(["base", "prefix", "select", "distinct", "reduced", "construct", "describe",
                              "ask", "from", "named", "where", "order", "limit", "offset", "filter", "optional",
                              "graph", "by", "asc", "desc", "as", "having", "undef", "values", "group",
-                             "minus", "in", "not", "service", "silent", "using", "insert", "delete", "union",
+                             "minus", "in", "not", "servicebim", "silent", "using", "insert", "delete", "union",
                              "true", "false", "with",
                              "data", "copy", "to", "move", "add", "create", "drop", "clear", "load"]);
   var operatorChars = /[*+\-<>=&|\^\/!\?]/;
