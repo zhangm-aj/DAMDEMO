@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='项目管理',active='project'">
+<header th:replace="admin/fragments/header::headerFragment(${title},${active})"></header>
+<body class="fixed-left">
+<style type="text/css">
+    .waikuang{
+        width: 33%;
+        height: 250px;
+        background-color:white;
+        float: left;
+    }
+
+    .xiangmu {
+        width: 90%;
+        height: 200px;
+        position: relative;
+    }
+   .xiangmu .a1{
+       width: 100%;
+       height: 200px;
+   }
+   .xiangmu .a2{
+       z-index: 999;
+       opacity: 0.9;
+       position: absolute;
+       width: 8%;
+       height: 20px;
+       right: 0px;
+       top: 0px;
+   }
+    .xiangmuming{
+        width: 90%;
+        text-align: center;
+    }
+</style>
+<div id="wrapper">
+    <div th:replace="admin/fragments/header::header-body"></div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <a th:href="@{/admin/project/newpro}" style="text-align: center"><button>新建项目</button></a>
+                    </div>
+                    <div class="col-md-12" >
+
+                        <th:block th:each="post : ${projects.list}" >
+                            <div class="waikuang">
+                                <div class="xiangmu" th:pid = "${post.pid}">
+                                    <div class="a1" >
+                                        <a  th:href="@{'/admin/project/'+${post.pid}}">
+                                            <img src="../img/xiangmu.jpg" width="100%" height="200px"/>
+                                        </a>
+                                    </div>
+                                    <div class="a2"  >
+                                        <ul class="nav navbar-nav navbar-right pull-right" >
+                                            <li class="dropdown">
+                                                <a th:href="@{index.html}"class="dropdown-toggle profile" data-toggle="dropdown" aria-expanded="true">
+                                                    <span  ><img src="../img/tubiao2.jpg"></span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li> <a th:href="@{'/admin/project/rename/'+${post.pid}}" class="btn btn-primary btn-sm waves-effect waves-light m-b-5">
+                                                        <span>重命名</span>
+                                                    </a></li>
+                                                    <li><a href="javascript:void(0)" th:onclick="'delPost('+${post.pid}+');'" class="btn btn-danger btn-sm waves-effect waves-light m-b-5">
+                                                         <span>删除</span>
+                                                    </a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="xiangmuming" >
+                                    <span th:text="${post.pname}"></span>
+                                </div>
+
+                            </div>
+
+                        </th:block>
+                        <div th:replace="comm/macros :: pageAdminNav(${projects})"></div>
+                    </div>
+                </div>
+                </div>
+                <div th:replace="admin/fragments/footer :: footer-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div th:replace="admin/fragments/footer :: footer"></div>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var tale = new $.tale();
+    function delPost(pid) {
+        tale.alertConfirm({
+            title:'确定删除该项目吗?',
+            then: function () {
+                tale.post({
+                    url : '/admin/project/delete',
+                    data: {pid: pid},
+                    success: function (result) {
+                        if(result && result.code == 'success'){
+                            tale.alertOkAndReload('项目删除成功');
+                        } else {
+                            tale.alertError(result.msg || '项目删除失败');
+                        }
+                    }
+                });
+            }
+        });
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

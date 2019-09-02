@@ -93,25 +93,13 @@
                     <!--<a th:href="@{/admin/page}" th:class="${active}=='page'?'waves-effect active':'waves-effect'"><i-->
                             <!--class="fa fa-file-text" aria-hidden="true"></i><span> 页面管理 </span></a>-->
                 <!--</li>-->
-                <li th:class="${active}=='comments'?'active':''">
-                    <a th:href="@{/admin/comments}"
-                       th:class="${active}=='comments'?'waves-effect active':'waves-effect'"><i
-                            class="fa fa-comments" aria-hidden="true"></i><span> 评论管理 </span></a>
-                </li>
-                <li th:class="${active}=='category'?'active':''">
-                    <a th:href="@{/admin/category}"
-                       th:class="${active}=='category'?'waves-effect active':'waves-effect'"><i
-                            class="fa fa-tags" aria-hidden="true"></i><span> 分类/标签 </span></a>
-                </li>
+
                 <li th:class="${active}=='project'?'active':''">
                     <a th:href="@{/admin/project}"
                        th:class="${active}=='project'?'waves-effect active':'waves-effect'"><i
                             class="fa fa-cloud-upload" aria-hidden="true"></i><span> 项目管理 </span></a>
                 </li>
-                <li th:class="${active}=='links'?'active':''">
-                    <a th:href="@{/admin/links}" th:class="${active}=='links'?'waves-effect active':'waves-effect'"><i
-                            class="fa fa-link" aria-hidden="true"></i><span> 链接管理 </span></a>
-                </li>
+
                 <li th:class="${active}=='setting'?'active':''">
                     <a th:href="@{/admin/setting}"
                        th:class="${active}=='setting'?'waves-effect active':'waves-effect'"><i

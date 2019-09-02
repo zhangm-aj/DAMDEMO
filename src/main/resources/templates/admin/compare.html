@@ -1,4 +1,7 @@
-<template>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='模型对比',active='setting'">
+<body>
+<div>
   <div id="app">
     <header>
       <a class="logo"></a>
@@ -137,8 +140,12 @@
     <alert></alert>
     <footer-tpl style="height: 40px;"></footer-tpl>
   </div>
-</template>
-
+</div>
+<script src="https://static.bimface.com/developer/libs/jquery.js"></script>
+<script th:src="@{/admin/js/formateDateTime.js}"></script>
+<script th:src="@{/admin/js/plupload.full.min.js}"></script>
+<script src="https://static.bimface.com/api/BimfaceSDKLoader/BimfaceSDKLoader@latest-release.js"
+        charset="utf-8"></script>
 <script>
   import './less/compare.less'
   import Api from '../../api/api'
@@ -365,3 +372,5 @@
     }
   }
 </script>
+</body>
+</html>

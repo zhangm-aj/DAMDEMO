@@ -35,7 +35,7 @@ public class ProjectController extends BaseController {
             @RequestParam(name = "page", required = false, defaultValue = "1")
                     int page,
             @ApiParam(name = "limit", value = "每页数量", required = false)
-            @RequestParam(name = "limit", required = false, defaultValue = "10")
+            @RequestParam(name = "limit", required = false, defaultValue = "9")
                     int limit
     ) {
         ProjectCond projectCond = new ProjectCond();
@@ -44,7 +44,7 @@ public class ProjectController extends BaseController {
 
         request.setAttribute("projects",projects);
 
-        return "admin/project";
+        return "admin/project111";
     }
 
     //单击新建项目

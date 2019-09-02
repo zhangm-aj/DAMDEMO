@@ -5,12 +5,14 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int count = sc.nextInt();
-        int[] arr = new int[n];
-        for(int i = 0;i<n;i++){
-            arr[i] = sc.nextInt();
-        }
+        int N = sc.nextInt();
+        int K = sc.nextInt();
+        int W = sc.nextInt();
 
+
+    }
+    public static double new21Game(int N, int K, int W) {
+        double ans = 0.0;
+        return ans;
     }
 }

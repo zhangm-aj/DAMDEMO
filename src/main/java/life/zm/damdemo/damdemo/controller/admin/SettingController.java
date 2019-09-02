@@ -30,7 +30,7 @@ public class SettingController extends BaseController {
     @GetMapping(value = "")
     public String index() {
 
-        return "admin/setting";
+        return "admin/compare";
     }
 
 

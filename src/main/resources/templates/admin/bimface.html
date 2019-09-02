@@ -580,7 +580,7 @@
 
                 <div >
                     <ol class="breadcrumb">
-                        <li th:if="${session.projectDomain} != null"><a href=" "><span style="padding: 10px" th:text="所有项目"></span></a></li>
+                        <li th:if="${session.projectDomain} != null"><a href="/admin/project"><span style="padding: 10px" th:text="所有项目"></span></a></li>
                         <li th:if="${session.folderId} != 0"><a href="@{'/admin/article/'+${session.pid}}"><span th:text="${session.projectDomain.getPname()}"></span></a></li>
                         <li th:if="${session.folderId} != 0"><span th:text="${session.name}"></span></li>
                         <li th:if="${session.folderId} ==0"><span th:text="${session.projectDomain.getPname()}"></span></li>
@@ -729,7 +729,7 @@
 <script src="https://static.bimface.com/api/BimfaceSDKLoader/BimfaceSDKLoader@latest-release.js"
         charset="utf-8"></script>
 <script>
-    var id=0;
+    var id1=0;
     $(function () {
 
         var _height = window.innerHeight - 105;
@@ -745,8 +745,7 @@
         })
 
         $("#newFolder").click(function(){
-            console.log("id"+id)
-            window.location.href = '/admin/project/file/newFolder?folderId='+id+'&projectId='+[[${session.pid}]];
+            window.location.href = '/admin/project/file/newFolder?folderId='+id1+'&projectId='+[[${session.pid}]];
         })
 
         $('body').on('click', '.btnbimList', function () {
@@ -883,12 +882,12 @@
 
 
                 window.len++;
-                $.post('file/'+projectId+'/'+id, JSON.parse(responseObject.response).data, function (res) {
+                $.post('file/'+projectId+'/'+id1, JSON.parse(responseObject.response).data, function (res) {
                     if(window.len == uploader.files.length){
                         $('.popup-upload .step').eq(0).show().siblings().hide();
                         $('.popup-mask').hide();
                         $('.popup').hide();
-                        Guide.getFileList(id);
+                        Guide.getFileList(id1);
                     }
                 })
             });
@@ -1087,7 +1086,7 @@
                 }
             })
             console.log("folderId:"+[[${session.folderId}]])
-            id=folderId;
+            id1=folderId;
         },
 
         getIntegrateList: function () {
@@ -1210,7 +1209,7 @@
                 url: 'file?fileId=' + id,
                 type: 'DELETE',
                 success: function (result) {
-                    Guide.getFileList();
+                    Guide.getFileList(id1);
                 }
             });
         },
